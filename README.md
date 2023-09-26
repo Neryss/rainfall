@@ -1,6 +1,6 @@
 # Rainfall
 
-Another security project this time aiming towards reverse engineering of C code.
+Another security project this time aiming towards reverse engineering C code.
 
 ### VM Install
 Using virtualBox
