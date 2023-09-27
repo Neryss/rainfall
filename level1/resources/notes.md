@@ -51,3 +51,68 @@ int32_t run()
 ```
 
 ## Exploit
+
+So if we take a look at an `objdump` of [level1](./level1), we get the output you can find at [level1_dump](./level1_dump).
+
+The part we must take a look at is the address of `run()` which will spawn us a shell.
+
+```
+08048444 <run>:
+ 8048444:	55                   	push   %ebp
+ 8048445:	89 e5                	mov    %esp,%ebp
+ 8048447:	83 ec 18             	sub    $0x18,%esp
+ 804844a:	a1 c0 97 04 08       	mov    0x80497c0,%eax
+ 804844f:	89 c2                	mov    %eax,%edx
+ 8048451:	b8 70 85 04 08       	mov    $0x8048570,%eax
+ 8048456:	89 54 24 0c          	mov    %edx,0xc(%esp)
+ 804845a:	c7 44 24 08 13 00 00 	movl   $0x13,0x8(%esp)
+ 8048461:	00 
+ 8048462:	c7 44 24 04 01 00 00 	movl   $0x1,0x4(%esp)
+ 8048469:	00 
+ 804846a:	89 04 24             	mov    %eax,(%esp)
+ 804846d:	e8 de fe ff ff       	call   8048350 <fwrite@plt>
+ 8048472:	c7 04 24 84 85 04 08 	movl   $0x8048584,(%esp)
+ 8048479:	e8 e2 fe ff ff       	call   8048360 <system@plt>
+ 804847e:	c9                   	leave  
+ 804847f:	c3                   	ret    
+```
+
+Now that we have this wonderful address `08048444`, we will deep into how we can jump there!
+
+Earlier, we used Python to print a precise number of characters, which was the size of the buffer in which the program stores our input. And it's 76 chars long.
+
+Now the other thing which we will have to explain is how the stack is organized:
+
+## Stack explained
+
+When running a program, the system will allocate space for its needs in a specific order:
+```
+|kernel|
+|------|
+|stack |
+|------|
+|   I  |
+|   V  |
+|      |
+|   ^  |
+|   I  |
+|------|
+| heap |
+|------|
+| data |
+|------|
+| text |
+|------|
+```
+
+- Kernel: it's where the command line parameters are stored
+- Stack: holds local variables for each functions, when a new function is called, the arguments are pushed downward
+- Heap: where allocated data is stored, huge data such as files etc.
+- Data: where uninitialized and inizialized data are stored
+- Text: read only area where the actual code is stored
+
+Now, when a function is called, such as `gets()`, arguments are pushed onto the stack but so are the return address (where the pointer should return when the function is done) and the base pointer.
+
+And then there is our buffer, which is pushed at the end.
+
+Now, if we fill our buffer to the brim with 76 characters, 
