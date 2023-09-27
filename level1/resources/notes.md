@@ -1,4 +1,4 @@
-## Level1
+# Level1
 
 ## Analysis
 
@@ -18,3 +18,5 @@ level1@RainFall:~$
 ```
 
 First thing we notice is that it segfaults when typing too much characters.
+
+We also decompiled the program [here](./level1_decomp.c) and noticed several things:
