@@ -87,6 +87,7 @@ Now the other thing which we will have to explain is how the stack is organized:
 
 When running a program, the system will allocate space for its needs in a specific order:
 ```
+|------|
 |kernel|
 |------|
 |stack |
@@ -115,4 +116,35 @@ Now, when a function is called, such as `gets()`, arguments are pushed onto the 
 
 And then there is our buffer, which is pushed at the end.
 
-Now, if we fill our buffer to the brim with 76 characters, 
+Now, if we fill our buffer, which is on the stack, to the brim and over, we will overflow on the return address! Why? Because when a function is called, it will push the function itself on the stack, then the parameters, then the return address and finally the base pointer to look something like this:
+
+<-- Low address memories |
+High memory address -->
+
+```
+|---------|-------------------------------|-----|---------|--------|---|
+|         |                               |     |         |        |   |
+|   stack |  Buffer                       |  bp | return  | params | ft|
+|         |                               |     |         |        |   |
+|---------|-------------------------------|-----|---------|--------|---|
+```
+
+Now that we have this beautiful example, we can see why going higher than the buffer would cause issues...
+
+If we override the return address, the function will end and jump to the end of our payload which replaced the base return address!
+
+If this explication doesn't work for you, here's the [video](https://www.youtube.com/watch?v=1S0aBV-Waeo&ab_channel=Computerphile) that helped me through Dr_quine and this level!
+
+## What's next
+
+Now that we understand how, let's craft our payload!
+
+We can use the same command we used to find our buffer limit earlier, Python our savior today:
+
+`python -c 'print "a"*76' | ./level1`
+
+That will fill the buffer part and the bp part! So the next part will be on the return adress, we can write another address such as another function? And it will return to this function instead of the main, such as `08048444`.
+
+Now we will use python to do so, careful about the endian to write the address!
+
+`python -c 'print "a"*76 + "\x44\x84\x04\x08"' | ./level1`
