@@ -162,7 +162,7 @@ level1@RainFall:~$
 
 Uh? Weird, it doesn't keep the shell open... Since the `/bin/sh` will read the input passed previously and read EOF which will close the prompt.
 
-More precisions [here](https://unix.stackexchange.com/questions/203012/why-cant-i-open-a-shell-from-a-pipelined-process)
+More precisions about this specific issue [here](https://unix.stackexchange.com/questions/203012/why-cant-i-open-a-shell-from-a-pipelined-process)
 
 So there is a small trick we can use using `-` which is an alias to `/dev/stdin`. In this case it will be used to concat our payload and stdin so that the shell doesn't close!
 
