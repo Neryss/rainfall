@@ -118,15 +118,20 @@ And then there is our buffer, which is pushed at the end.
 
 Now, if we fill our buffer, which is on the stack, to the brim and over, we will overflow on the return address! Why? Because when a function is called, it will push the function itself on the stack, then the parameters, then the return address and finally the base pointer to look something like this:
 
-<-- Low address memories |
-High memory address -->
-
 ```
-|---------|-------------------------------|--------|----|--------|---|
-|         |                               |        |    |        |   |
-|   stack |  Buffer                       | return | bp | params | ft|
-|         |                               |        |    |        |   |
-|---------|-------------------------------|--------|----|--------|---|
+       HIGH
+|----------------|   ------------ f1 start   
+|                |  76 (%EBP)
+|      BUFFER    |
+|                |
+|----------------|  
+|      RET       |  4 (%EBP)
+|----------------|   
+|      EBP       |  --> points to previous / main's frame (%EBP)
+|----------------|  
+|   local vars   |  -4 (%EBP)
+|----------------|  ------------ f1 end (ESP)
+       LOW
 ```
 
 Now that we have this beautiful example, we can see why going higher than the buffer would cause issues...
