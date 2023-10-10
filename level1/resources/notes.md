@@ -70,7 +70,7 @@ The part we must take a look at is the address of `run()` which will spawn us a 
  8048462:	c7 44 24 04 01 00 00 	movl   $0x1,0x4(%esp)
  8048469:	00 
  804846a:	89 04 24             	mov    %eax,(%esp)
- 804846d:	e8 de fe ff ff       	call   8048350 <fwrite@plt>
+ 804846d:	e8 de fe ff ff       	call   8048350 <fwrite@plt
  8048472:	c7 04 24 84 85 04 08 	movl   $0x8048584,(%esp)
  8048479:	e8 e2 fe ff ff       	call   8048360 <system@plt>
  804847e:	c9                   	leave  
@@ -122,11 +122,11 @@ Now, if we fill our buffer, which is on the stack, to the brim and over, we will
 High memory address -->
 
 ```
-|---------|-------------------------------|-----|---------|--------|---|
-|         |                               |     |         |        |   |
-|   stack |  Buffer                       |  bp | return  | params | ft|
-|         |                               |     |         |        |   |
-|---------|-------------------------------|-----|---------|--------|---|
+|---------|-------------------------------|--------|----|--------|---|
+|         |                               |        |    |        |   |
+|   stack |  Buffer                       | return | bp | params | ft|
+|         |                               |        |    |        |   |
+|---------|-------------------------------|--------|----|--------|---|
 ```
 
 Now that we have this beautiful example, we can see why going higher than the buffer would cause issues...
