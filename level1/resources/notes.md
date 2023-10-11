@@ -120,18 +120,23 @@ Now, if we fill our buffer, which is on the stack, to the brim and over, we will
 
 ```
        HIGH
-|----------------|   ------------ f1 start   
-|                |  76 (%EBP)
-|      BUFFER    |
+|----------------|   ----- Frame start
 |                |
-|----------------|  
-|      RET       |  4 (%EBP)
-|----------------|   
-|      EBP       |  --> points to previous / main's frame (%EBP)
-|----------------|  
-|   local vars   |  -4 (%EBP)
-|----------------|  ------------ f1 end (ESP)
+|    ARGUMENTS   |
+|                |
+|----------------|
+|     RET        |
+|----------------|
+|     EBP        |   --> points to previous / main's frame
+|----------------|
+|                |
+|  LOCAL VAR     |
+|     BUFFER     |
+|                |   buffer would fill from bottom to up
+|----------------|   ---- Frame end (ESP)
        LOW
+
+Previous frames would be here
 ```
 
 Now that we have this beautiful example, we can see why going higher than the buffer would cause issues...
