@@ -76,7 +76,7 @@ This is what our payload will look like:
 
    134513828 (which is the decimal representation of the address of `o()`) now becomes 134513824. The reason being that printf counts the first 4 bytes that we wrote (the address of `exit@plt`) in its total written bytes, hence why we remove 4 to correctly write "134513828" at the correct adress. You can't see them when you `cat` the file, but you can see them using `xdd` and notice that they are indeed present (which makes perfect sense). When you cat the file, you get this `8%134513824x%4$n`, however printf receives `\x38\x98\x04\x08%134513824x%4$n` to interpret. 
 
-  We will write using the same trick as before `[offset$n]` which will write to the fourth address in the stack (which should be our first printf argument so the address):
+  We will write using the same trick as before `[offset$n]` which will write to the fourth address in the stack (which should be our first printf argument, so the address):
 
   ```bash
   level5@RainFall:~$ python -c 'print "\x38\x98\x04\x08" + "%134513824x%4$n"' > /var/crash/exploit

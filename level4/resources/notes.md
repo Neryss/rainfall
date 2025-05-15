@@ -34,7 +34,9 @@ Our payload will look something like this:
 <details>
   <summary>Spoiler</summary>
 
-  We will right the address of `m` followed by `16930116 - 4(size of the address)` characters. `%16930112x` will write 16930112 characters that will then be treated by `%12$n` as, write the number of bytes we wrote as a number in the 12th arguments which is our `m` address
+  We will right the address of `m` followed by `16930116 - 4(size of the address)` characters. `%16930112x` will write 16930112 characters that will then be treated by `%12$n` as, write the number of bytes we wrote as a number in the 12th arguments which is our `m` address.
+
+  `%<n>$n` let's you write at the n offset of printf' var_args, in our case it let's us "skip" the popping of address to get to the right stack addr. Which also avoid to take the size of the written popped address we would have using `%x%x%x` (here we would have to take into account the length of the 3 address, which could be of different sizes as we saw in the example above when trying to find the offset). It's easier to understand/read while keeping us away from missing offset here and there...
 
   ```bash
   python -c 'print "\x10\x98\x04\x08" + "%16930112x%12$n"'
