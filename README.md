@@ -14,9 +14,9 @@ Using virtualBox
 
 ## Resources
 
-- [iso](https://files.neryss.pw/random/RainFall.iso)
+- ~~[iso](https://files.neryss.pw/random/RainFall.iso)~~
 - [subject](./en.subject.pdf)
-- [cutter](https://cutter.re/): reverse engineering tool, you can also use [Ghidra](https://ghidra-sre.org/) for example!
+- [Decompiler explorer](https://dogbolt.org/) website showing several decompiler outputs for your executable, you can also use [Ghidra](https://ghidra-sre.org/) for example!
 
 ## Level/pass
 
